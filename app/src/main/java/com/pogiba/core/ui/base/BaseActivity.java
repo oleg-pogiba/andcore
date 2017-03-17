@@ -1,5 +1,6 @@
 package com.pogiba.core.ui.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -8,7 +9,10 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import timber.log.Timber;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.CoreApplication;
+import com.pogiba.core.R;
 import com.pogiba.core.injection.component.ActivityComponent;
 import com.pogiba.core.injection.component.ConfigPersistentComponent;
 import com.pogiba.core.injection.component.DaggerConfigPersistentComponent;
@@ -27,6 +31,14 @@ public class BaseActivity extends AppCompatActivity {
 
     private ActivityComponent mActivityComponent;
     private long mActivityId;
+
+    // firebase auth
+    private ProgressDialog progressDialog;
+    //todo: di
+    private FirebaseAuth mAuth;
+    public FirebaseAuth getFirebaseAuth() {
+        return mAuth;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,9 @@ public class BaseActivity extends AppCompatActivity {
             configPersistentComponent = sComponentsMap.get(mActivityId);
         }
         mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
+        // firebase auth
+        //todo: di
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -67,6 +82,21 @@ public class BaseActivity extends AppCompatActivity {
 
     public ActivityComponent activityComponent() {
         return mActivityComponent;
+    }
+
+    protected void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.setIndeterminate(true);
+        }
+        progressDialog.show();
+    }
+
+    protected void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
     }
 
 }
