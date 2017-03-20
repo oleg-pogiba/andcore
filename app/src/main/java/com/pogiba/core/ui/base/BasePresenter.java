@@ -3,28 +3,28 @@ package com.pogiba.core.ui.base;
 /**
  * Base class that implements the Presenter interface and provides a base implementation for
  * attachView() and detachView(). It also handles keeping a reference to the mvpView that
- * can be accessed from the children classes by calling getMvpView().
+ * can be accessed from the children classes by calling getView().
  */
 public class BasePresenter<T extends MvpView> implements Presenter<T> {
 
-    private T mMvpView;
+    private T view;
 
     @Override
-    public void attachView(T mvpView) {
-        mMvpView = mvpView;
+    public void attachView(T view) {
+        this.view = view;
     }
 
     @Override
     public void detachView() {
-        mMvpView = null;
+        view = null;
     }
 
     public boolean isViewAttached() {
-        return mMvpView != null;
+        return view != null;
     }
 
-    public T getMvpView() {
-        return mMvpView;
+    public T getView() {
+        return view;
     }
 
     public void checkViewAttached() {

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
 import com.pogiba.core.ui.base.BaseActivity;
+import com.pogiba.core.ui.login.LoginActivity;
 
 public class ProfileActivity extends BaseActivity implements
     GoogleApiClient.OnConnectionFailedListener {

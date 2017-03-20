@@ -27,8 +27,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
 
     @Override
-    public void attachView(MainMvpView mvpView) {
-        super.attachView(mvpView);
+    public void attachView(MainMvpView view) {
+        super.attachView(view);
     }
 
     @Override
@@ -51,15 +51,15 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "There was an error loading the ribots.");
-                        getMvpView().showError();
+                        getView().showError();
                     }
 
                     @Override
                     public void onNext(List<Ribot> ribots) {
                         if (ribots.isEmpty()) {
-                            getMvpView().showRibotsEmpty();
+                            getView().showRibotsEmpty();
                         } else {
-                            getMvpView().showRibots(ribots);
+                            getView().showRibots(ribots);
                         }
                     }
                 });

@@ -20,7 +20,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
