@@ -1,6 +1,7 @@
 package com.pogiba.core.ui.base;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -95,7 +96,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void hideProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.hide();
+            progressDialog.dismiss();
         }
     }
 
