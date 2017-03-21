@@ -33,15 +33,9 @@ public class BaseActivity extends AppCompatActivity {
 
   private ActivityComponent mActivityComponent;
   private long mActivityId;
-
-  // firebase auth
   private ProgressDialog progressDialog;
-  //todo: di
-  private FirebaseAuth mAuth;
 
-  public FirebaseAuth getFirebaseAuth() {
-    return mAuth;
-  }
+  ConfigPersistentComponent configPersistentComponent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     // being called after a configuration change.
     mActivityId = savedInstanceState != null ?
                     savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();
-    ConfigPersistentComponent configPersistentComponent;
+
     if (!sComponentsMap.containsKey(mActivityId)) {
       Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId);
       configPersistentComponent = DaggerConfigPersistentComponent.builder()
@@ -62,10 +56,11 @@ public class BaseActivity extends AppCompatActivity {
       Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
       configPersistentComponent = sComponentsMap.get(mActivityId);
     }
-    mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
-    // firebase auth
-    //todo: di
-    mAuth = FirebaseAuth.getInstance();
+
+
+    mActivityComponent = configPersistentComponent
+                           .activityComponent(new ActivityModule(this));
+
   }
 
   @Override
@@ -106,4 +101,7 @@ public class BaseActivity extends AppCompatActivity {
     Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
   }
 
+  public ConfigPersistentComponent getConfigPersistentComponent() {
+    return configPersistentComponent;
+  }
 }

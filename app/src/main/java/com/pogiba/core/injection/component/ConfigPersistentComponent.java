@@ -3,6 +3,7 @@ package com.pogiba.core.injection.component;
 import dagger.Component;
 import com.pogiba.core.injection.ConfigPersistent;
 import com.pogiba.core.injection.module.ActivityModule;
+import com.pogiba.core.injection.module.GoogleSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;
 
 /**
@@ -17,5 +18,6 @@ import com.pogiba.core.ui.base.BaseActivity;
 public interface ConfigPersistentComponent {
 
     ActivityComponent activityComponent(ActivityModule activityModule);
+    GoogleSignInComponent googleSignInComponent(GoogleSignInModule presenterModule);
 
 }

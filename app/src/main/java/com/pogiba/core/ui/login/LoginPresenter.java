@@ -28,6 +28,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
   //todo: di
   private FirebaseAuth firebaseAuth;
 
+  // inject dependencies from ApplicationComponent
   @Inject
   public LoginPresenter(DataManager dataManager, @ApplicationContext Context context) {
     mDataManager = dataManager;
