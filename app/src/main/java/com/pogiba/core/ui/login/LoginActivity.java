@@ -12,7 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.R;
-import com.pogiba.core.injection.module.GoogleSignInModule;
+import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.auth.ProfileActivity;
 import com.pogiba.core.ui.auth.ResetPasswordActivity;
 import com.pogiba.core.ui.auth.SignupActivity;
@@ -26,9 +26,6 @@ public class LoginActivity extends BaseActivity implements
   @Inject
   LoginPresenter presenter;
 
-  @Inject
-  GoogleSignInPresenter googleSignInPresenter;
-
   private EditText inputEmail, inputPassword;
 
   private Button btnSignUp, btnLogin, btnReset;
@@ -40,19 +37,9 @@ public class LoginActivity extends BaseActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    // di
-    activityComponent()
-      .inject(this);
-    getConfigPersistentComponent()
-      .googleSignInComponent(new GoogleSignInModule(googleSignInPresenter))
-      .inject(googleSignInPresenter);
-
+    inject();
     presenter.attachView(this);
-    // todo
-    googleSignInPresenter.attachView(this);
 
-    // todo: di
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       updateUI(true);
     }
@@ -72,25 +59,30 @@ public class LoginActivity extends BaseActivity implements
     SignInButton signInButton = (SignInButton) findViewById(R.id.btn_google_signin);
     signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-
     btnSignUp.setOnClickListener(this);
     btnLogin.setOnClickListener(this);
     btnReset.setOnClickListener(this);
     signInButton.setOnClickListener(this);
+  }
 
-
+  private void inject() {
+    activityComponent()
+      .inject(this);
+    getConfigPersistentComponent()
+      .googleSignInComponent(new FirebaseSignInModule(presenter))
+      .inject(presenter);
   }
 
   @Override
   public void onStart() {
     super.onStart();
-    googleSignInPresenter.onStart();
+    presenter.onStart();
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    googleSignInPresenter.onStop();
+    presenter.onStop();
   }
 
   @Override
@@ -98,9 +90,9 @@ public class LoginActivity extends BaseActivity implements
     super.onActivityResult(requestCode, resultCode, data);
 
     // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    if (requestCode == GoogleSignInPresenter.RC_SIGN_IN) {
+    if (requestCode == LoginPresenter.RC_SIGN_IN) {
       GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-      googleSignInPresenter.handleSignInResult(result);
+      presenter.handleSignInResult(result);
     }
   }
 
@@ -124,8 +116,8 @@ public class LoginActivity extends BaseActivity implements
 
   private void googleSignIn() {
     showProgressDialog();
-    Intent signInIntent = googleSignInPresenter.getGoogleSignInIntent();
-    startActivityForResult(signInIntent, GoogleSignInPresenter.RC_SIGN_IN);
+    Intent signInIntent = presenter.getGoogleSignInIntent();
+    startActivityForResult(signInIntent, presenter.RC_SIGN_IN);
   }
 
   public void updateUI(boolean signedIn) {

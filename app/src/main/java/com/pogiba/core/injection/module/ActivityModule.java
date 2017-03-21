@@ -2,20 +2,12 @@ package com.pogiba.core.injection.module;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+
+import com.pogiba.core.injection.ActivityContext;
+import com.pogiba.core.ui.login.LoginPresenter;
 
 import dagger.Module;
 import dagger.Provides;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.pogiba.core.R;
-import com.pogiba.core.injection.ActivityContext;
-import com.pogiba.core.injection.ApplicationContext;
-import com.pogiba.core.ui.login.GoogleSignInPresenter;
-
-import javax.inject.Singleton;
 
 @Module
 public class ActivityModule {
@@ -38,8 +30,8 @@ public class ActivityModule {
   }
 
   @Provides
-  GoogleSignInPresenter providesGoogleSignInPresenter(Activity activity) {
-    return new GoogleSignInPresenter(activity);
+  LoginPresenter providesGoogleSignInPresenter(Activity activity) {
+    return new LoginPresenter(activity);
   }
 
 }
