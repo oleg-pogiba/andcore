@@ -19,6 +19,9 @@ import com.pogiba.core.injection.component.ActivityComponent;
 import com.pogiba.core.injection.component.ConfigPersistentComponent;
 import com.pogiba.core.injection.component.DaggerConfigPersistentComponent;
 import com.pogiba.core.injection.module.ActivityModule;
+import com.pogiba.core.ui.Navigator;
+
+import javax.inject.Inject;
 
 /**
  * Abstract activity that every other Activity in this application must implement. It handles
@@ -34,6 +37,9 @@ public class BaseActivity extends AppCompatActivity {
   private ActivityComponent mActivityComponent;
   private long mActivityId;
   private ProgressDialog progressDialog;
+
+  @Inject
+  Navigator navigator;
 
   ConfigPersistentComponent configPersistentComponent;
 
@@ -103,5 +109,9 @@ public class BaseActivity extends AppCompatActivity {
 
   public ConfigPersistentComponent getConfigPersistentComponent() {
     return configPersistentComponent;
+  }
+
+  public Navigator getNavigator() {
+    return navigator;
   }
 }

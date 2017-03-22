@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.auth;
+package com.pogiba.core.ui.signin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.R;
+import com.pogiba.core.ui.auth.ProfileActivity;
+import com.pogiba.core.ui.auth.ResetPasswordActivity;
 import com.pogiba.core.ui.base.BaseActivity;
 
 public class SignupActivity extends BaseActivity {

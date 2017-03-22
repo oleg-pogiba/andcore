@@ -1,11 +1,8 @@
 package com.pogiba.core.injection.component;
 
-import android.content.Context;
-
-import dagger.Provides;
 import dagger.Subcomponent;
 
-import com.pogiba.core.injection.PerActivity;
+import com.pogiba.core.injection.scope.PerActivity;
 import com.pogiba.core.injection.module.ActivityModule;
 import com.pogiba.core.ui.login.LoginActivity;
 import com.pogiba.core.ui.main.MainActivity;

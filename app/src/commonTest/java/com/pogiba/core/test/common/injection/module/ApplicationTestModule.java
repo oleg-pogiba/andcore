@@ -9,7 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.data.remote.RibotsService;
-import com.pogiba.core.injection.ApplicationContext;
+import com.pogiba.core.injection.qualifier.ApplicationContext;
 
 import static org.mockito.Mockito.mock;
 

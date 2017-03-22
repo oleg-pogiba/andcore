@@ -3,7 +3,7 @@ package com.pogiba.core.injection.module;
 import android.app.Activity;
 import android.content.Context;
 
-import com.pogiba.core.injection.ActivityContext;
+import com.pogiba.core.injection.qualifier.ActivityContext;
 import com.pogiba.core.ui.login.LoginPresenter;
 
 import dagger.Module;

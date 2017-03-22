@@ -11,7 +11,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.data.model.Ribot;
-import com.pogiba.core.injection.ConfigPersistent;
+import com.pogiba.core.injection.scope.ConfigPersistent;
 import com.pogiba.core.ui.base.BasePresenter;
 import com.pogiba.core.util.RxUtil;
 

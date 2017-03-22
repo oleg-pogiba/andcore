@@ -22,8 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.pogiba.core.R;
 import com.pogiba.core.data.DataManager;
-import com.pogiba.core.injection.ApplicationContext;
-import com.pogiba.core.injection.ConfigPersistent;
+import com.pogiba.core.injection.qualifier.ApplicationContext;
+import com.pogiba.core.injection.scope.ConfigPersistent;
 import com.pogiba.core.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -33,8 +33,6 @@ import rx.Subscription;
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginView> implements
     GoogleApiClient.OnConnectionFailedListener{
-
-
 
   public static final String TAG = "GoogleSignInPresenter";
   public static final int RC_SIGN_IN = 9001;
@@ -61,23 +59,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
     mContext = context;
   }
 
-
-
-//  @Override
-//  public void attachView(LoginView view) {
-//    super.attachView(view);
-//  }
-//
-//  @Override
-//  public void detachView() {
-//    super.detachView();
-//    if (mSubscription != null) mSubscription.unsubscribe();
-//  }
-//
-//  public FirebaseAuth getFirebaseAuth() {
-//    return firebaseAuth;
-//  }
-
   public void signIn(String email, String password) {
 
     if (TextUtils.isEmpty(email)) {
@@ -92,6 +73,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
 
     if (password.length() < 6) {
       getView().setErrorForInputPassword();
+      return;
     }
 
     getView().showProgressDialog();
@@ -203,9 +185,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
       getView().updateUI(false);
     }
     getView().updateUI(true);
-
     // ...
-
   }
 
   @Override
@@ -222,34 +202,4 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
   public FirebaseAuth getFirebaseAuth() {
     return mAuth;
   }
-
-  public void loadRibots() {
-
-//        checkViewAttached();
-//        RxUtil.unsubscribe(mSubscription);
-//        mSubscription = mDataManager.getRibots()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Subscriber<List<Ribot>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Timber.e(e, "There was an error loading the ribots.");
-//                        getView().showError();
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<Ribot> ribots) {
-//                        if (ribots.isEmpty()) {
-//                            getView().showRibotsEmpty();
-//                        } else {
-//                            getView().showRibots(ribots);
-//                        }
-//                    }
-//                });
-  }
-
 }

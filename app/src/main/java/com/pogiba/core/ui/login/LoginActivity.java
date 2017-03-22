@@ -2,6 +2,7 @@ package com.pogiba.core.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -14,63 +15,62 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.R;
 import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.auth.ProfileActivity;
-import com.pogiba.core.ui.auth.ResetPasswordActivity;
-import com.pogiba.core.ui.auth.SignupActivity;
 import com.pogiba.core.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
-public class LoginActivity extends BaseActivity implements
-    View.OnClickListener, LoginView {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class LoginActivity extends BaseActivity implements LoginView {
+  private static final String TAG = "LoginActivity";
 
   @Inject
   LoginPresenter presenter;
 
-  private EditText inputEmail, inputPassword;
+  @BindView(R.id.email) EditText inputEmail;
+  @BindView(R.id.password) EditText inputPassword;
+  @BindView(R.id.btn_signup) Button btnSignUp;
+  @BindView(R.id.btn_login) Button btnLogin;
+  @BindView(R.id.btn_reset_password) Button btnReset;
+  @BindView(R.id.btn_google_signin) SignInButton signInButton;
 
-  private Button btnSignUp, btnLogin, btnReset;
-
-
-  private static final String TAG = "LoginActivity";
-
+  @OnClick(R.id.btn_signup)
+  public void signUp(View view) {
+    getNavigator().navigateToSignUp(this);
+  }
+  @OnClick(R.id.btn_reset_password)
+  public void resetPassword(View view) {
+    getNavigator().navigateToResetPassword(this);
+  }
+  @OnClick(R.id.btn_login)
+  public void login(View view) {
+    presenter.signIn(inputEmail.getText().toString(), inputPassword.getText().toString());
+  }
+  @OnClick(R.id.btn_google_signin)
+  public void signIn(View view) {
+    googleSignIn();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     inject();
     presenter.attachView(this);
 
-    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      updateUI(true);
-    }
-
     // set the view now
     setContentView(R.layout.activity_login);
+    ButterKnife.bind(this);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    inputEmail = (EditText) findViewById(R.id.email);
-    inputPassword = (EditText) findViewById(R.id.password);
-
-    btnSignUp = (Button) findViewById(R.id.btn_signup);
-    btnLogin = (Button) findViewById(R.id.btn_login);
-    btnReset = (Button) findViewById(R.id.btn_reset_password);
-    SignInButton signInButton = (SignInButton) findViewById(R.id.btn_google_signin);
-    signInButton.setSize(SignInButton.SIZE_STANDARD);
-
-    btnSignUp.setOnClickListener(this);
-    btnLogin.setOnClickListener(this);
-    btnReset.setOnClickListener(this);
-    signInButton.setOnClickListener(this);
-  }
-
-  private void inject() {
-    activityComponent()
-      .inject(this);
-    getConfigPersistentComponent()
-      .googleSignInComponent(new FirebaseSignInModule(presenter))
-      .inject(presenter);
+    // todo move to base
+    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+      updateUI(true);
+    }
   }
 
   @Override
@@ -95,31 +95,7 @@ public class LoginActivity extends BaseActivity implements
       presenter.handleSignInResult(result);
     }
   }
-
-  @Override
-  public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.btn_signup:
-        signUp();
-        break;
-      case R.id.btn_reset_password:
-        resetPassword();
-        break;
-      case R.id.btn_login:
-        presenter.signIn(inputEmail.getText().toString(), inputPassword.getText().toString());
-        break;
-      case R.id.btn_google_signin:
-        googleSignIn();
-        break;
-    }
-  }
-
-  private void googleSignIn() {
-    showProgressDialog();
-    Intent signInIntent = presenter.getGoogleSignInIntent();
-    startActivityForResult(signInIntent, presenter.RC_SIGN_IN);
-  }
-
+  //todo move to base
   public void updateUI(boolean signedIn) {
     if (signedIn) {
       startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
@@ -133,12 +109,18 @@ public class LoginActivity extends BaseActivity implements
     inputPassword.setError(getString(R.string.minimum_password));
   }
 
-  private void signUp() {
-    startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+  private void inject() {
+    activityComponent()
+      .inject(this);
+    getConfigPersistentComponent()
+      .googleSignInComponent(new FirebaseSignInModule(presenter))
+      .inject(presenter);
   }
 
-  private void resetPassword() {
-    startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+  private void googleSignIn() {
+    showProgressDialog();
+    Intent signInIntent = presenter.getGoogleSignInIntent();
+    startActivityForResult(signInIntent, presenter.RC_SIGN_IN);
   }
 }
 

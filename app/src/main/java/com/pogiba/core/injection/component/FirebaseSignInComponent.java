@@ -1,6 +1,6 @@
 package com.pogiba.core.injection.component;
 
-import com.pogiba.core.injection.PerActivity;
+import com.pogiba.core.injection.scope.PerActivity;
 import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.login.LoginPresenter;
 

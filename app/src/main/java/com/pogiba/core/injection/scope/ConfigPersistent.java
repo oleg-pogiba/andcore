@@ -1,4 +1,4 @@
-package com.pogiba.core.injection;
+package com.pogiba.core.injection.scope;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

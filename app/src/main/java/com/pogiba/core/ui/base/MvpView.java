@@ -7,5 +7,7 @@ package com.pogiba.core.ui.base;
  * that then usually will be implemented by an Activity or Fragment.
  */
 public interface MvpView {
-
+  public void showProgressDialog();
+  public void hideProgressDialog();
+  public void showMessage(String message);
 }

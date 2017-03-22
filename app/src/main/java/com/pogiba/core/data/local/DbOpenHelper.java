@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.pogiba.core.injection.ApplicationContext;
+import com.pogiba.core.injection.qualifier.ApplicationContext;
 
 @Singleton
 public class DbOpenHelper extends SQLiteOpenHelper {
