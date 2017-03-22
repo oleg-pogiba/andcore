@@ -31,10 +31,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
   @BindView(R.id.email) EditText inputEmail;
   @BindView(R.id.password) EditText inputPassword;
-  @BindView(R.id.btn_signup) Button btnSignUp;
-  @BindView(R.id.btn_login) Button btnLogin;
-  @BindView(R.id.btn_reset_password) Button btnReset;
-  @BindView(R.id.btn_google_signin) SignInButton signInButton;
 
   @OnClick(R.id.btn_signup)
   public void signUp(View view) {

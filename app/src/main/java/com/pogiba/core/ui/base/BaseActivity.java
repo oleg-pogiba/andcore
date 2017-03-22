@@ -64,8 +64,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    mActivityComponent = configPersistentComponent
-                           .activityComponent(new ActivityModule(this));
+    mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
 
   }
 

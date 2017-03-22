@@ -34,7 +34,7 @@ import rx.Subscription;
 public class LoginPresenter extends BasePresenter<LoginView> implements
     GoogleApiClient.OnConnectionFailedListener{
 
-  public static final String TAG = "GoogleSignInPresenter";
+  public static final String TAG = "LoginPresenter";
   public static final int RC_SIGN_IN = 9001;
 
   private Context mContext;

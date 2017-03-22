@@ -6,6 +6,7 @@ import com.pogiba.core.injection.scope.PerActivity;
 import com.pogiba.core.injection.module.ActivityModule;
 import com.pogiba.core.ui.login.LoginActivity;
 import com.pogiba.core.ui.main.MainActivity;
+import com.pogiba.core.ui.signup.SignupActivity;
 
 /**
  * This component inject dependencies to all Activities across the application
@@ -17,5 +18,7 @@ public interface ActivityComponent {
   void inject(MainActivity mainActivity);
 
   void inject(LoginActivity loginActivity);
+
+  void inject(SignupActivity signupActivity);
 
 }

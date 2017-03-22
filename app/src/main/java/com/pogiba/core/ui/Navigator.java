@@ -6,12 +6,11 @@ import android.content.Intent;
 
 
 import com.pogiba.core.injection.scope.PerActivity;
+import com.pogiba.core.ui.auth.ProfileActivity;
 import com.pogiba.core.ui.auth.ResetPasswordActivity;
-import com.pogiba.core.ui.login.LoginActivity;
-import com.pogiba.core.ui.signin.SignupActivity;
+import com.pogiba.core.ui.signup.SignupActivity;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Class used to navigate through the application.
@@ -39,6 +38,13 @@ public class Navigator {
   public void navigateToResetPassword(Context context) {
     if (context != null) {
       Intent intentToLaunch = new Intent(context, ResetPasswordActivity.class);
+      context.startActivity(intentToLaunch);
+    }
+  }
+
+  public void navigateToProfile(Context context) {
+    if (context != null) {
+      Intent intentToLaunch = new Intent(context, ProfileActivity.class);
       context.startActivity(intentToLaunch);
     }
   }
