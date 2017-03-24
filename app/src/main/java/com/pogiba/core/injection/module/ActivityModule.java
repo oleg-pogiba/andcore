@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.pogiba.core.injection.qualifier.ActivityContext;
-import com.pogiba.core.ui.login.LoginPresenter;
-import com.pogiba.core.ui.signup.SignupPresenter;
+import com.pogiba.core.ui.auth.login.LoginPresenter;
+import com.pogiba.core.ui.auth.signup.SignupPresenter;
 
 import dagger.Module;
 import dagger.Provides;

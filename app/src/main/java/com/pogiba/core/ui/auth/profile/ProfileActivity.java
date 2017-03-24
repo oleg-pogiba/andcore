@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.auth;
+package com.pogiba.core.ui.auth.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.login.LoginActivity;
-import com.pogiba.core.ui.signup.SignupActivity;
+import com.pogiba.core.ui.auth.login.LoginActivity;
+import com.pogiba.core.ui.auth.signup.SignupActivity;
 
 public class ProfileActivity extends BaseActivity implements
     GoogleApiClient.OnConnectionFailedListener {

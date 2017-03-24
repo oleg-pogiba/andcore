@@ -10,7 +10,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
-import com.pogiba.core.ui.login.LoginPresenter;
+import com.pogiba.core.ui.auth.login.LoginPresenter;
 
 import dagger.Module;
 import dagger.Provides;

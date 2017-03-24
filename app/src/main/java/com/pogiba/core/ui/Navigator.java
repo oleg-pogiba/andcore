@@ -6,9 +6,9 @@ import android.content.Intent;
 
 
 import com.pogiba.core.injection.scope.PerActivity;
-import com.pogiba.core.ui.auth.ProfileActivity;
-import com.pogiba.core.ui.auth.ResetPasswordActivity;
-import com.pogiba.core.ui.signup.SignupActivity;
+import com.pogiba.core.ui.auth.profile.ProfileActivity;
+import com.pogiba.core.ui.auth.reset_password.ResetPasswordActivity;
+import com.pogiba.core.ui.auth.signup.SignupActivity;
 
 import javax.inject.Inject;
 

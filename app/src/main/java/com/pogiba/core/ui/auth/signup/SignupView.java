@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.signup;
+package com.pogiba.core.ui.auth.signup;
 
 import com.pogiba.core.ui.base.MvpView;
 

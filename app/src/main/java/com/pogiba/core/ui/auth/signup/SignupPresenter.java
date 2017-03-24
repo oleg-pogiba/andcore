@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.signup;
+package com.pogiba.core.ui.auth.signup;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

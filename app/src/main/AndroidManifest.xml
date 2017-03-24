@@ -20,7 +20,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.auth.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,15 +29,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.auth.ProfileActivity"
+            android:name=".ui.auth.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.signup.SignupActivity"
+            android:name=".ui.auth.signup.SignupActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.auth.ResetPasswordActivity"
+            android:name=".ui.auth.reset_password.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
 

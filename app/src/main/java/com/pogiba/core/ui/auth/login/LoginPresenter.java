@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.login;
+package com.pogiba.core.ui.auth.login;
 
 import android.content.Context;
 import android.content.Intent;

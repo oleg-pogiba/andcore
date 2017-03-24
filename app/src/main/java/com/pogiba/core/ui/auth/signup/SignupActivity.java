@@ -1,12 +1,10 @@
-package com.pogiba.core.ui.signup;
+package com.pogiba.core.ui.auth.signup;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.pogiba.core.R;
-import com.pogiba.core.ui.auth.ResetPasswordActivity;
 import com.pogiba.core.ui.base.BaseActivity;
 
 import javax.inject.Inject;
@@ -28,13 +26,13 @@ public class SignupActivity extends BaseActivity implements SignupView {
   EditText inputPassword;
 
   @OnClick(R.id.sign_in_button)
-  public void signIn(View view) {
+  public void signin(View view) {
     finish();
   }
 
   @OnClick(R.id.btn_reset_password)
   public void resetPassword(View view) {
-    startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
+    getNavigator().navigateToResetPassword(this);
   }
 
   @OnClick(R.id.sign_up_button)
@@ -51,15 +49,11 @@ public class SignupActivity extends BaseActivity implements SignupView {
     presenter.attachView(this);
     setContentView(R.layout.activity_signup);
     ButterKnife.bind(this);
-
   }
 
   private void inject() {
     activityComponent()
       .inject(this);
-//    getConfigPersistentComponent()
-//      .googleSignInComponent(new FirebaseSignInModule(presenter))
-//      .inject(presenter);
   }
 
   @Override
