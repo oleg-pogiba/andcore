@@ -73,7 +73,6 @@ public class FirebaseSignInModule {
             Log.d("FirebaseAuthStateLstnr", "onAuthStateChanged:signed_out");
             navigator.navigateToLogin((AppCompatActivity) presenter.getView());
           }
-          // ...
         }
       };
   }
