@@ -52,14 +52,14 @@ public class Navigator {
   }
 
   public void navigateToLogin(Activity activity) {
-    if (activity != null) {
+    if (activity != null && !activity.getClass().getSimpleName().equals("LoginActivity")) {
       Intent intentToLaunch = new Intent(activity, LoginActivity.class);
       activity.startActivity(intentToLaunch);
       activity.finish();
     }
   }
   public void navigateToDefaultAndFinishCurrent(Activity activity) {
-    if (activity != null) {
+    if (activity != null && !activity.getClass().getSimpleName().equals("ProfileActivity")) {
       Intent intentToLaunch = new Intent(activity, ProfileActivity.class);
       activity.startActivity(intentToLaunch);
       activity.finish();

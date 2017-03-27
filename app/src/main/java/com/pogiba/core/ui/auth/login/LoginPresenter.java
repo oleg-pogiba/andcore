@@ -1,5 +1,6 @@
 package com.pogiba.core.ui.auth.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -32,7 +33,7 @@ import rx.Subscription;
 
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginView> implements
-    GoogleApiClient.OnConnectionFailedListener{
+  GoogleApiClient.OnConnectionFailedListener {
 
   public static final String TAG = "LoginPresenter";
   public static final int RC_SIGN_IN = 9001;
@@ -48,16 +49,17 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
   @Inject
   FirebaseAuth.AuthStateListener mAuthListener;
 
-  public LoginPresenter(Context context) {
-    mContext = context;
+  public LoginPresenter(Activity view) {
+    mContext = view;
+    super.attachView((LoginView) view);
   }
 
-  // inject dependencies from ApplicationComponent
-  @Inject
-  public LoginPresenter(DataManager dataManager, @ApplicationContext Context context) {
-    mDataManager = dataManager;
-    mContext = context;
-  }
+//  // inject dependencies from ApplicationComponent
+//  @Inject
+//  public LoginPresenter(DataManager dataManager, @ApplicationContext Context context) {
+//    mDataManager = dataManager;
+//    mContext = context;
+//  }
 
   public void signIn(String email, String password) {
 
@@ -67,7 +69,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
     }
 
     if (TextUtils.isEmpty(password)) {
-      getView().showMessage( "Enter password!");
+      getView().showMessage("Enter password!");
       return;
     }
 
@@ -163,12 +165,12 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
 
     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
     getFirebaseAuth().signInWithCredential(credential)
-        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-          @Override
-          public void onComplete(@NonNull Task<AuthResult> task) {
-            handleFirebaseAuthWithGoogleResult(task);
-          }
-        });
+      .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
+          handleFirebaseAuthWithGoogleResult(task);
+        }
+      });
   }
 
   private void handleFirebaseAuthWithGoogleResult(Task<AuthResult> task) {
@@ -181,7 +183,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
       Log.w(TAG, "signInWithCredential", task.getException());
       ///// todo
       Toast.makeText(mContext, "Authentication failed.",
-          Toast.LENGTH_SHORT).show();
+        Toast.LENGTH_SHORT).show();
       getView().updateUI(false);
     }
     getView().updateUI(true);

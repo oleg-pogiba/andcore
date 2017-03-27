@@ -1,44 +1,26 @@
 package com.pogiba.core.ui.auth.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
+import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.auth.login.LoginActivity;
-import com.pogiba.core.ui.auth.signup.SignupActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProfileActivity extends BaseActivity implements
-    GoogleApiClient.OnConnectionFailedListener {
+public class ProfileActivity extends BaseActivity implements ProfileView {
 
   private static final String TAG = "ProfileActivity";
 
-  private FirebaseAuth.AuthStateListener authListener;
-  private FirebaseAuth mAuth;
-  private GoogleApiClient mGoogleApiClient;
-  //get current user
-  final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+  @Inject
+  ProfilePresenter presenter;
 
   @BindView(R.id.old_email)
   EditText oldEmail;
@@ -99,78 +81,17 @@ public class ProfileActivity extends BaseActivity implements
 
   @OnClick(R.id.changeEmail)
   public void changeEmail(View view) {
-    showProgressDialog();
-    if (user != null && !newEmail.getText().toString().trim().equals("")) {
-      user.updateEmail(newEmail.getText().toString().trim())
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-          @Override
-          public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful()) {
-              Toast.makeText(ProfileActivity.this, "Email address is updated. Please sign in with new email id!", Toast.LENGTH_LONG).show();
-              signOut();
-              hideProgressDialog();
-            } else {
-              Toast.makeText(ProfileActivity.this, "Failed to update email!", Toast.LENGTH_LONG).show();
-              hideProgressDialog();
-            }
-          }
-        });
-    } else if (newEmail.getText().toString().trim().equals("")) {
-      newEmail.setError("Enter email");
-      hideProgressDialog();
-    }
+    presenter.changeEmail(newEmail.getText().toString().trim());
   }
 
   @OnClick(R.id.changePass)
   public void changePass(View view) {
-    showProgressDialog();
-    if (user != null && !newPassword.getText().toString().trim().equals("")) {
-      if (newPassword.getText().toString().trim().length() < 6) {
-        newPassword.setError("Password too short, enter minimum 6 characters");
-        hideProgressDialog();
-      } else {
-        user.updatePassword(newPassword.getText().toString().trim())
-          .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-              if (task.isSuccessful()) {
-                Toast.makeText(ProfileActivity.this, "Password is updated, sign in with new password!", Toast.LENGTH_SHORT).show();
-                signOut();
-                hideProgressDialog();
-              } else {
-                Toast.makeText(ProfileActivity.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
-                hideProgressDialog();
-              }
-            }
-          });
-      }
-    } else if (newPassword.getText().toString().trim().equals("")) {
-      newPassword.setError("Enter password");
-      hideProgressDialog();
-    }
+    presenter.changePass(newPassword.getText().toString().trim());
   }
 
   @OnClick(R.id.send)
   public void send(View view) {
-    showProgressDialog();
-    if (!oldEmail.getText().toString().trim().equals("")) {
-      mAuth.sendPasswordResetEmail(oldEmail.getText().toString().trim())
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-          @Override
-          public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful()) {
-              Toast.makeText(ProfileActivity.this, "Reset password email is sent!", Toast.LENGTH_SHORT).show();
-              hideProgressDialog();
-            } else {
-              Toast.makeText(ProfileActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
-              hideProgressDialog();
-            }
-          }
-        });
-    } else {
-      oldEmail.setError("Enter email");
-      hideProgressDialog();
-    }
+    presenter.send(oldEmail.getText().toString().trim());
   }
 
   @Override
@@ -182,37 +103,22 @@ public class ProfileActivity extends BaseActivity implements
     toolbar.setTitle(getString(R.string.app_name));
     setSupportActionBar(toolbar);
 
-    //get firebase mAuth instance
-    mAuth = FirebaseAuth.getInstance();
-
+    inject();
+    presenter.attachView(this);
     ButterKnife.bind(this);
 
-    //Configure sign-in to request the user's ID, email address, and basic
-    //profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(getString(R.string.default_web_client_id))
-        .requestEmail()
-        .build();
-    // Build a GoogleApiClient with access to the Google Sign-In API and the
-    // options specified by googleSignInOptions.
-    mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-        .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-        .build();
+    setVisibility();
+  }
 
-    authListener = new FirebaseAuth.AuthStateListener() {
-      @Override
-      public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user == null) {
-          // user mAuth state is changed - user is null
-          // launch login activity
-          startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-          finish();
-        }
-      }
-    };
+  private void inject() {
+    activityComponent()
+      .inject(this);
+    getConfigPersistentComponent()
+      .googleSignInComponent(new FirebaseSignInModule(presenter))
+      .inject(presenter);
+  }
 
+  private void setVisibility() {
     oldEmail.setVisibility(View.GONE);
     newEmail.setVisibility(View.GONE);
     password.setVisibility(View.GONE);
@@ -222,18 +128,24 @@ public class ProfileActivity extends BaseActivity implements
     sendEmail.setVisibility(View.GONE);
   }
 
+  @Override
+  public void setErrorOldEmail(String str) {
+    oldEmail.setError(str);
+  }
+
+  @Override
+  public void setErrorNewPassword(String str) {
+    newPassword.setError(str);
+  }
+
+  @Override
+  public void setErrorNewEmail(String str) {
+    newEmail.setError(str);
+  }
+
   @OnClick(R.id.sign_out)
   public void signOut() {
-    //Firebase signOut
-    mAuth.signOut();
-    //Google signOut
-    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-        new ResultCallback<Status>() {
-          @Override
-          public void onResult(Status status) {
-            //updateUI(false);
-          }
-        });
+    presenter.signOut();
   }
 
   @Override
@@ -245,22 +157,13 @@ public class ProfileActivity extends BaseActivity implements
   @Override
   public void onStart() {
     super.onStart();
-    mAuth.addAuthStateListener(authListener);
+    presenter.onStart();
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    if (authListener != null) {
-      mAuth.removeAuthStateListener(authListener);
-    }
-  }
-
-  @Override
-  public void onConnectionFailed(ConnectionResult connectionResult) {
-    // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-    // be available.
-    Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    presenter.onStop();
   }
 
 }
