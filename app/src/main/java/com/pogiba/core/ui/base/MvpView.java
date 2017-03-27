@@ -8,6 +8,8 @@ package com.pogiba.core.ui.base;
  */
 public interface MvpView {
   public void showProgressDialog();
+
   public void hideProgressDialog();
+
   public void showMessage(String message);
 }

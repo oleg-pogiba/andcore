@@ -62,7 +62,7 @@ public class SignupPresenter extends BasePresenter<SignupView> {
           // the auth state listener will be notified and logic to handle the
           // signed in user can be handled in the listener.
           if (!task.isSuccessful()) {
-            getView().showMessage( "Authentication failed." + task.getException());
+            getView().showMessage("Authentication failed." + task.getException());
             Log.e(TAG, "Authentication failed." + task.getException());
           } else {
             getView().goToProfileAndFinishActivity();

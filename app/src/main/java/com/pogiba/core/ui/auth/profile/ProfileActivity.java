@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.pogiba.core.R;
 import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;

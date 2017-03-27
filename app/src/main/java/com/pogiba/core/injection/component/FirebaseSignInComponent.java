@@ -15,5 +15,6 @@ import dagger.Subcomponent;
 public interface FirebaseSignInComponent {
 
   void inject(LoginPresenter presenter);
+
   void inject(ProfilePresenter presenter);
 }

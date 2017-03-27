@@ -58,6 +58,7 @@ public class Navigator {
       activity.finish();
     }
   }
+
   public void navigateToDefaultAndFinishCurrent(Activity activity) {
     if (activity != null && !activity.getClass().getSimpleName().equals("ProfileActivity")) {
       Intent intentToLaunch = new Intent(activity, ProfileActivity.class);

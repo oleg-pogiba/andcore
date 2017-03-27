@@ -26,21 +26,26 @@ public class LoginActivity extends BaseActivity implements LoginView {
   @Inject
   LoginPresenter presenter;
 
-  @BindView(R.id.email) EditText inputEmail;
-  @BindView(R.id.password) EditText inputPassword;
+  @BindView(R.id.email)
+  EditText inputEmail;
+  @BindView(R.id.password)
+  EditText inputPassword;
 
   @OnClick(R.id.btn_signup)
   public void signUp(View view) {
     getNavigator().navigateToSignUp(this);
   }
+
   @OnClick(R.id.btn_reset_password)
   public void resetPassword(View view) {
     getNavigator().navigateToResetPassword(this);
   }
+
   @OnClick(R.id.btn_login)
   public void login(View view) {
     presenter.signIn(inputEmail.getText().toString(), inputPassword.getText().toString());
   }
+
   @OnClick(R.id.btn_google_signin)
   public void signIn(View view) {
     googleSignIn();
@@ -88,6 +93,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
       presenter.handleSignInResult(result);
     }
   }
+
   //todo move to base
   public void updateUI(boolean signedIn) {
     if (signedIn) {

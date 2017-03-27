@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+
 import com.pogiba.core.data.remote.RibotsService;
 import com.pogiba.core.injection.qualifier.ApplicationContext;
 
@@ -15,27 +16,27 @@ import com.pogiba.core.injection.qualifier.ApplicationContext;
  */
 @Module
 public class ApplicationModule {
-    protected final Application mApplication;
+  protected final Application mApplication;
 
-    public ApplicationModule(Application application) {
-        mApplication = application;
-    }
+  public ApplicationModule(Application application) {
+    mApplication = application;
+  }
 
-    @Provides
-    Application provideApplication() {
-        return mApplication;
-    }
+  @Provides
+  Application provideApplication() {
+    return mApplication;
+  }
 
-    @Provides
-    @ApplicationContext
-    Context provideContext() {
-        return mApplication;
-    }
+  @Provides
+  @ApplicationContext
+  Context provideContext() {
+    return mApplication;
+  }
 
-    @Provides
-    @Singleton
-    RibotsService provideRibotsService() {
-        return RibotsService.Creator.newRibotsService();
-    }
+  @Provides
+  @Singleton
+  RibotsService provideRibotsService() {
+    return RibotsService.Creator.newRibotsService();
+  }
 
 }

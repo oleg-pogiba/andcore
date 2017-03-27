@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import com.pogiba.core.R;
 import com.pogiba.core.data.SyncService;
 import com.pogiba.core.data.model.Ribot;
@@ -22,68 +23,71 @@ import com.pogiba.core.util.DialogFactory;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
 
-    private static final String EXTRA_TRIGGER_SYNC_FLAG =
-            "com.pogiba.core.ui.main.MainActivity.EXTRA_TRIGGER_SYNC_FLAG";
+  private static final String EXTRA_TRIGGER_SYNC_FLAG =
+    "com.pogiba.core.ui.main.MainActivity.EXTRA_TRIGGER_SYNC_FLAG";
 
-    @Inject MainPresenter mMainPresenter;
-    @Inject RibotsAdapter mRibotsAdapter;
+  @Inject
+  MainPresenter mMainPresenter;
+  @Inject
+  RibotsAdapter mRibotsAdapter;
 
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+  @BindView(R.id.recycler_view)
+  RecyclerView mRecyclerView;
 
-    /**
-     * Return an Intent to start this Activity.
-     * triggerDataSyncOnCreate allows disabling the background sync service onCreate. Should
-     * only be set to false during testing.
-     */
-    public static Intent getStartIntent(Context context, boolean triggerDataSyncOnCreate) {
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(EXTRA_TRIGGER_SYNC_FLAG, triggerDataSyncOnCreate);
-        return intent;
+  /**
+   * Return an Intent to start this Activity.
+   * triggerDataSyncOnCreate allows disabling the background sync service onCreate. Should
+   * only be set to false during testing.
+   */
+  public static Intent getStartIntent(Context context, boolean triggerDataSyncOnCreate) {
+    Intent intent = new Intent(context, MainActivity.class);
+    intent.putExtra(EXTRA_TRIGGER_SYNC_FLAG, triggerDataSyncOnCreate);
+    return intent;
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    activityComponent().inject(this);
+    setContentView(R.layout.activity_main);
+    ButterKnife.bind(this);
+
+    mRecyclerView.setAdapter(mRibotsAdapter);
+    mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    mMainPresenter.attachView(this);
+    mMainPresenter.loadRibots();
+
+    if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
+      startService(SyncService.getStartIntent(this));
     }
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activityComponent().inject(this);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
 
-        mRecyclerView.setAdapter(mRibotsAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mMainPresenter.attachView(this);
-        mMainPresenter.loadRibots();
+    mMainPresenter.detachView();
+  }
 
-        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
-            startService(SyncService.getStartIntent(this));
-        }
-    }
+  /***** MVP View methods implementation *****/
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+  @Override
+  public void showRibots(List<Ribot> ribots) {
+    mRibotsAdapter.setRibots(ribots);
+    mRibotsAdapter.notifyDataSetChanged();
+  }
 
-        mMainPresenter.detachView();
-    }
+  @Override
+  public void showError() {
+    DialogFactory.createGenericErrorDialog(this, getString(R.string.error_loading_ribots))
+      .show();
+  }
 
-    /***** MVP View methods implementation *****/
-
-    @Override
-    public void showRibots(List<Ribot> ribots) {
-        mRibotsAdapter.setRibots(ribots);
-        mRibotsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showError() {
-        DialogFactory.createGenericErrorDialog(this, getString(R.string.error_loading_ribots))
-                .show();
-    }
-
-    @Override
-    public void showRibotsEmpty() {
-        mRibotsAdapter.setRibots(Collections.<Ribot>emptyList());
-        mRibotsAdapter.notifyDataSetChanged();
-        Toast.makeText(this, R.string.empty_ribots, Toast.LENGTH_LONG).show();
-    }
+  @Override
+  public void showRibotsEmpty() {
+    mRibotsAdapter.setRibots(Collections.<Ribot>emptyList());
+    mRibotsAdapter.notifyDataSetChanged();
+    Toast.makeText(this, R.string.empty_ribots, Toast.LENGTH_LONG).show();
+  }
 
 }

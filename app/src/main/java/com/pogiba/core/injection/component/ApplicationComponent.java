@@ -6,6 +6,7 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
+
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.data.SyncService;
 import com.pogiba.core.data.local.DatabaseHelper;
@@ -19,14 +20,21 @@ import com.pogiba.core.util.RxEventBus;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(SyncService syncService);
+  void inject(SyncService syncService);
 
-    @ApplicationContext Context context();
-    Application application();
-    RibotsService ribotsService();
-    PreferencesHelper preferencesHelper();
-    DatabaseHelper databaseHelper();
-    DataManager dataManager();
-    RxEventBus eventBus();
+  @ApplicationContext
+  Context context();
+
+  Application application();
+
+  RibotsService ribotsService();
+
+  PreferencesHelper preferencesHelper();
+
+  DatabaseHelper databaseHelper();
+
+  DataManager dataManager();
+
+  RxEventBus eventBus();
 
 }

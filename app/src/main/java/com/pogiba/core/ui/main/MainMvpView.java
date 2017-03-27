@@ -7,10 +7,10 @@ import com.pogiba.core.ui.base.MvpView;
 
 public interface MainMvpView extends MvpView {
 
-    void showRibots(List<Ribot> ribots);
+  void showRibots(List<Ribot> ribots);
 
-    void showRibotsEmpty();
+  void showRibotsEmpty();
 
-    void showError();
+  void showError();
 
 }

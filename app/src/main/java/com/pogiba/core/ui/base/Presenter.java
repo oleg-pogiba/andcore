@@ -6,7 +6,7 @@ package com.pogiba.core.ui.base;
  */
 public interface Presenter<V extends MvpView> {
 
-    void attachView(V mvpView);
+  void attachView(V mvpView);
 
-    void detachView();
+  void detachView();
 }
