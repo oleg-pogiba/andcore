@@ -71,4 +71,5 @@ public class SignupActivity extends BaseActivity implements SignupView {
     getNavigator().navigateToProfile(this);
     finish();
   }
+
 }

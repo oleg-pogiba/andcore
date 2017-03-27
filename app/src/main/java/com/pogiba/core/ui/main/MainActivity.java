@@ -49,6 +49,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     activityComponent().inject(this);
+    // if user is signed out navigate to login activity
+    checkAccess();
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 

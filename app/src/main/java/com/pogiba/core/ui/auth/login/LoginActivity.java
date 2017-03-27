@@ -65,10 +65,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    // todo move to base
-    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      updateUI(true);
-    }
+//    // todo move to base
+//    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//      updateUI(true);
+//    }
   }
 
   @Override
@@ -94,15 +94,15 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
   }
 
-  //todo move to base
-  public void updateUI(boolean signedIn) {
-    if (signedIn) {
-      startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-      finish();
-    } else {
-      //... some msg
-    }
-  }
+//  //todo move to base
+//  public void updateUI(boolean signedIn) {
+//    if (signedIn) {
+//      //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+//      //finish();
+//    } else {
+//      //... some msg
+//    }
+//  }
 
   public void setErrorForInputPassword() {
     inputPassword.setError(getString(R.string.minimum_password));

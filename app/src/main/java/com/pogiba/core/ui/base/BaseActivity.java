@@ -1,16 +1,9 @@
 package com.pogiba.core.ui.base;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
-import timber.log.Timber;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.CoreApplication;
@@ -21,7 +14,13 @@ import com.pogiba.core.injection.component.DaggerConfigPersistentComponent;
 import com.pogiba.core.injection.module.ActivityModule;
 import com.pogiba.core.ui.Navigator;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * Abstract activity that every other Activity in this application must implement. It handles
@@ -50,13 +49,13 @@ public class BaseActivity extends AppCompatActivity {
     // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
     // being called after a configuration change.
     mActivityId = savedInstanceState != null ?
-                    savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();
+        savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();
 
     if (!sComponentsMap.containsKey(mActivityId)) {
       Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId);
       configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                                    .applicationComponent(CoreApplication.get(this).getComponent())
-                                    .build();
+          .applicationComponent(CoreApplication.get(this).getComponent())
+          .build();
       sComponentsMap.put(mActivityId, configPersistentComponent);
     } else {
       Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
@@ -65,7 +64,12 @@ public class BaseActivity extends AppCompatActivity {
 
 
     mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
+  }
 
+  public void checkAccess() {
+    if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+      getNavigator().navigateToLogin(this);
+    }
   }
 
   @Override

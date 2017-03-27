@@ -92,7 +92,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
             // there was an error
             getView().showMessage(mContext.getString(R.string.auth_failed));
           } else {
-            getView().updateUI(true);
+            //getView().updateUI(true);
           }
         }
       });
@@ -150,10 +150,10 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
       // Signed in successfully, show authenticated UI.
       GoogleSignInAccount account = result.getSignInAccount();
       firebaseAuthWithGoogle(account);
-      //updateUI(true);
+      //getView().updateUI(true);
     } else {
       // Signed out, show unauthenticated UI.
-      getView().updateUI(false);
+      //getView().updateUI(false);
     }
 
     getView().hideProgressDialog();
@@ -184,10 +184,10 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
       ///// todo
       Toast.makeText(mContext, "Authentication failed.",
         Toast.LENGTH_SHORT).show();
-      getView().updateUI(false);
+      //getView().updateUI(false);
     }
-    getView().updateUI(true);
-    // ...
+    //getView().updateUI(true);
+
   }
 
   @Override
@@ -201,7 +201,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
     return mContext;
   }
 
-  public FirebaseAuth getFirebaseAuth() {
+  private FirebaseAuth getFirebaseAuth() {
     return mAuth;
   }
 }
