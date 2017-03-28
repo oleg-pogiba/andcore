@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Collections;
@@ -54,6 +58,10 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar.setTitle(getString(R.string.app_name));
+    setSupportActionBar(toolbar);
+
     mRecyclerView.setAdapter(mRibotsAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     mMainPresenter.attachView(this);
@@ -69,6 +77,28 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     super.onDestroy();
 
     mMainPresenter.detachView();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      // action with ID action_refresh was selected
+      case R.id.action_sign_out:
+        Toast.makeText(this, "Sign Out selected", Toast.LENGTH_SHORT)
+            .show();
+        break;
+      default:
+        break;
+    }
+
+    return true;
   }
 
   /***** MVP View methods implementation *****/

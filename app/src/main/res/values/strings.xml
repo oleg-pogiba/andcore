@@ -2,6 +2,7 @@
     <string name="app_name">AndroidCore</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_sign_out">Sign Out</string>
 
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>

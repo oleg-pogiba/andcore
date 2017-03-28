@@ -57,7 +57,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
     if (mSubscription != null) mSubscription.unsubscribe();
   }
 
-  public void signOut() {
+  protected void signOut() {
     //Firebase signOut
     mAuth.signOut();
     //Google signOut
@@ -70,7 +70,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
       });
   }
 
-  public void send(String email) {
+  protected void send(String email) {
     getView().showProgressDialog();
     if (!email.equals("")) {
       mAuth.sendPasswordResetEmail(email)
@@ -92,7 +92,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
     }
   }
 
-  public void changePass(String password) {
+  protected void changePass(String password) {
     getView().showProgressDialog();
 
 
@@ -122,7 +122,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
     }
   }
 
-  public void changeEmail(String email) {
+  protected void changeEmail(String email) {
     getView().showProgressDialog();
     if (user != null && !email.equals("")) {
       user.updateEmail(email)
