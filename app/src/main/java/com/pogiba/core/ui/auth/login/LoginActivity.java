@@ -8,10 +8,8 @@ import android.widget.EditText;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.R;
 import com.pogiba.core.injection.module.FirebaseSignInModule;
-import com.pogiba.core.ui.auth.profile.ProfileActivity;
 import com.pogiba.core.ui.base.BaseActivity;
 
 import javax.inject.Inject;

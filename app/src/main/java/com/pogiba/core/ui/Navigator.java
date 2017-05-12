@@ -11,6 +11,7 @@ import com.pogiba.core.ui.auth.login.LoginActivity;
 import com.pogiba.core.ui.auth.profile.ProfileActivity;
 import com.pogiba.core.ui.auth.reset_password.ResetPasswordActivity;
 import com.pogiba.core.ui.auth.signup.SignupActivity;
+import com.pogiba.core.ui.main.MainActivity;
 
 import javax.inject.Inject;
 
@@ -60,8 +61,8 @@ public class Navigator {
   }
 
   public void navigateToDefaultAndFinishCurrent(Activity activity) {
-    if (activity != null && !activity.getClass().getSimpleName().equals("ProfileActivity")) {
-      Intent intentToLaunch = new Intent(activity, ProfileActivity.class);
+    if (activity != null && !activity.getClass().getSimpleName().equals("MainActivity")) {
+      Intent intentToLaunch = new Intent(activity, MainActivity.class);
       activity.startActivity(intentToLaunch);
       activity.finish();
     }

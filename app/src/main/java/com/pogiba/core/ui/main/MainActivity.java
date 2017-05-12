@@ -19,6 +19,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.R;
 import com.pogiba.core.data.SyncService;
 import com.pogiba.core.data.model.Ribot;
@@ -34,6 +39,15 @@ public class MainActivity extends BaseActivity implements MainMvpView {
   MainPresenter mMainPresenter;
   @Inject
   RibotsAdapter mRibotsAdapter;
+
+  @Inject
+  FirebaseAuth mAuth;
+
+  @Inject
+  FirebaseAuth.AuthStateListener authListener;
+
+  @Inject
+  GoogleApiClient mGoogleApiClient;
 
   @BindView(R.id.recycler_view)
   RecyclerView mRecyclerView;
@@ -65,6 +79,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     mRecyclerView.setAdapter(mRibotsAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     mMainPresenter.attachView(this);
+
+    mAuth.addAuthStateListener(authListener);
+
     mMainPresenter.loadRibots();
 
     if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
@@ -75,6 +92,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+
+    mAuth.removeAuthStateListener(authListener);
 
     mMainPresenter.detachView();
   }
@@ -91,7 +110,20 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     switch (item.getItemId()) {
       // action with ID action_refresh was selected
       case R.id.action_sign_out:
-        Toast.makeText(this, "Sign Out selected", Toast.LENGTH_SHORT)
+        //Firebase signOut
+        mAuth.signOut();
+        //Google signOut
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+          new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+              //...
+            }
+          });
+
+//        FirebaseAuthManager firebaseAuthManager =  new FirebaseAuthManager();
+//        firebaseAuthManager.signOut();
+        Toast.makeText(this, "Sign Out...", Toast.LENGTH_SHORT)
             .show();
         break;
       default:
