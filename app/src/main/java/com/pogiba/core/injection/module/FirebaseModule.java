@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
 import com.pogiba.core.ui.Navigator;
+import com.pogiba.core.ui.base.BaseActivity;
+import com.pogiba.core.ui.base.FirebaseManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,19 +20,19 @@ import dagger.Provides;
 @Module
 public class FirebaseModule {
 
-  private AppCompatActivity activity;
+  private BaseActivity activity;
 
-  public FirebaseModule(AppCompatActivity a) {
+  public FirebaseModule(BaseActivity a) {
     activity = a;
   }
 
   @Provides
-  AppCompatActivity provideActivity() {
+  BaseActivity provideActivity() {
     return activity;
   }
 
   @Provides
-  GoogleApiClient provideGoogleApiClient(AppCompatActivity activity) {
+  GoogleApiClient provideGoogleApiClient(BaseActivity activity) {
    // AppCompatActivity context = (AppCompatActivity) presenter.getView();
 
     //Configure sign-in to request the user's ID, email address, and basic
@@ -61,10 +63,11 @@ public class FirebaseModule {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
           FirebaseUser user = firebaseAuth.getCurrentUser();
+          // todo add additional check, consider place for listeners
           if (user != null) {
             // User is signed in
             Log.d("FirebaseAuthStateLstnr", "onAuthStateChanged:signed_in:" + user.getUid());
-            navigator.navigateToDefaultAndFinishCurrent(activity);
+            //navigator.navigateToDefaultAndFinishCurrent(activity);
           } else {
             // User is signed out
             Log.d("FirebaseAuthStateLstnr", "onAuthStateChanged:signed_out");
@@ -72,6 +75,11 @@ public class FirebaseModule {
           }
         }
       };
+  }
+
+  @Provides
+  FirebaseManager provideFirebaseManager(BaseActivity activity, FirebaseAuth auth, FirebaseAuth.AuthStateListener authListener, GoogleApiClient googleApiClient){
+    return new FirebaseManager(activity, auth, authListener, googleApiClient);
   }
 
 }

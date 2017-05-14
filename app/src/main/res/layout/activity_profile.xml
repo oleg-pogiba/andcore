@@ -94,7 +94,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/send"
+            android:id="@+id/send_password_reset_email"
             style="?android:textAppearanceSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,8 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.pogiba.core.R;
-import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;
+import com.pogiba.core.ui.base.FirebaseManager;
 
 import javax.inject.Inject;
 
@@ -22,6 +22,9 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
 
   @Inject
   ProfilePresenter presenter;
+
+  @Inject
+  FirebaseManager firebaseManager;
 
   @BindView(R.id.old_email)
   EditText oldEmail;
@@ -42,7 +45,7 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
   Button changeEmail;
   @BindView(R.id.changePass)
   Button changePassword;
-  @BindView(R.id.send)
+  @BindView(R.id.send_password_reset_email)
   Button sendEmail;
   @BindView(R.id.sign_out)
   Button signOut;
@@ -90,9 +93,9 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
     presenter.changePass(newPassword.getText().toString().trim());
   }
 
-  @OnClick(R.id.send)
-  public void send(View view) {
-    presenter.send(oldEmail.getText().toString().trim());
+  @OnClick(R.id.send_password_reset_email)
+  public void sendPasswordResetEmail(View view) {
+    presenter.sendPasswordResetEmail(oldEmail.getText().toString().trim());
   }
 
   @Override
@@ -106,6 +109,7 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
 
     inject();
     presenter.attachView(this);
+    presenter.setFirebaseManager(firebaseManager);
     ButterKnife.bind(this);
 
     setVisibility();
@@ -114,9 +118,6 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
   private void inject() {
     activityComponent()
       .inject(this);
-    getConfigPersistentComponent()
-      .googleSignInComponent(new FirebaseSignInModule(presenter))
-      .inject(presenter);
   }
 
   private void setVisibility() {
@@ -146,7 +147,8 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
 
   @OnClick(R.id.sign_out)
   public void signOut() {
-    presenter.signOut();
+    //presenter.signOut();
+    firebaseManager.signOut();
   }
 
   @Override

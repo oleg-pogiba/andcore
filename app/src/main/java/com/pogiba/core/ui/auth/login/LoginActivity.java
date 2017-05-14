@@ -9,8 +9,8 @@ import android.widget.EditText;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.pogiba.core.R;
-import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;
+import com.pogiba.core.ui.base.FirebaseManager;
 
 import javax.inject.Inject;
 
@@ -23,6 +23,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
   @Inject
   LoginPresenter presenter;
+
+  @Inject
+  FirebaseManager firebaseManager;
 
   @BindView(R.id.email)
   EditText inputEmail;
@@ -55,7 +58,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     inject();
     presenter.attachView(this);
-
+    presenter.setFirebaseManager(firebaseManager);
     // set the view now
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
@@ -94,14 +97,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
   private void inject() {
     activityComponent()
       .inject(this);
-    getConfigPersistentComponent()
-      .googleSignInComponent(new FirebaseSignInModule(presenter))
-      .inject(presenter);
   }
 
   private void googleSignIn() {
     showProgressDialog();
-    Intent signInIntent = presenter.getGoogleSignInIntent();
+    Intent signInIntent = firebaseManager.getGoogleSignInIntent();
     startActivityForResult(signInIntent, presenter.RC_SIGN_IN);
   }
 }

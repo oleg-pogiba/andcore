@@ -7,6 +7,7 @@ import com.pogiba.core.injection.scope.PerActivity;
 import com.pogiba.core.injection.module.ActivityModule;
 import com.pogiba.core.ui.auth.login.LoginActivity;
 import com.pogiba.core.ui.auth.profile.ProfileActivity;
+import com.pogiba.core.ui.base.BaseActivity;
 import com.pogiba.core.ui.main.MainActivity;
 import com.pogiba.core.ui.auth.signup.SignupActivity;
 

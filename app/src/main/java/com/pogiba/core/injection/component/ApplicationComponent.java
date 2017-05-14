@@ -14,6 +14,7 @@ import com.pogiba.core.data.local.PreferencesHelper;
 import com.pogiba.core.data.remote.RibotsService;
 import com.pogiba.core.injection.qualifier.ApplicationContext;
 import com.pogiba.core.injection.module.ApplicationModule;
+import com.pogiba.core.ui.base.FirebaseManager;
 import com.pogiba.core.util.RxEventBus;
 
 @Singleton
@@ -36,5 +37,6 @@ public interface ApplicationComponent {
   DataManager dataManager();
 
   RxEventBus eventBus();
+
 
 }

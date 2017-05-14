@@ -5,7 +5,6 @@ import dagger.Component;
 import com.pogiba.core.injection.module.FirebaseModule;
 import com.pogiba.core.injection.scope.ConfigPersistent;
 import com.pogiba.core.injection.module.ActivityModule;
-import com.pogiba.core.injection.module.FirebaseSignInModule;
 import com.pogiba.core.ui.base.BaseActivity;
 
 /**
@@ -20,7 +19,5 @@ import com.pogiba.core.ui.base.BaseActivity;
 public interface ConfigPersistentComponent {
 
   ActivityComponent activityComponent(ActivityModule activityModule, FirebaseModule firebaseModule);
-
-  FirebaseSignInComponent googleSignInComponent(FirebaseSignInModule presenterModule);
 
 }

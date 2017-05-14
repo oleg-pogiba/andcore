@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.CoreApplication;
 import com.pogiba.core.R;
@@ -67,7 +70,6 @@ public class BaseActivity extends AppCompatActivity implements
       Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
       configPersistentComponent = sComponentsMap.get(mActivityId);
     }
-
 
     mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this), new FirebaseModule(this));
   }

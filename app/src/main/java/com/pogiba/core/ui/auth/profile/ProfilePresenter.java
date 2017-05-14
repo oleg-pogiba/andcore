@@ -4,22 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.ui.base.BasePresenter;
-
-import javax.inject.Inject;
+import com.pogiba.core.ui.base.FirebaseManager;
 
 import rx.Subscription;
 
@@ -29,14 +23,16 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   private Context mContext;
   private Subscription mSubscription;
 
-  @Inject
-  FirebaseAuth mAuth;
+//  @Inject
+//  FirebaseAuth mAuth;
+//
+//  @Inject
+//  FirebaseAuth.AuthStateListener authListener;
+//
+//  @Inject
+//  GoogleApiClient mGoogleApiClient;
 
-  @Inject
-  FirebaseAuth.AuthStateListener authListener;
-
-  @Inject
-  GoogleApiClient mGoogleApiClient;
+  private FirebaseManager firebaseManager;
 
   public ProfilePresenter(Activity view) {
     mContext = view;
@@ -45,6 +41,10 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
 
   //get current user
   final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+  public void setFirebaseManager(FirebaseManager firebaseManager) {
+    this.firebaseManager = firebaseManager;
+  }
 
   @Override
   public void attachView(ProfileView view) {
@@ -57,35 +57,23 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
     if (mSubscription != null) mSubscription.unsubscribe();
   }
 
-  protected void signOut() {
-    //Firebase signOut
-    mAuth.signOut();
-    //Google signOut
-    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-      new ResultCallback<Status>() {
-        @Override
-        public void onResult(Status status) {
-          //...
+  protected void sendPasswordResetEmail(String email) {
+    OnCompleteListener<Void> onCompleteListener = new OnCompleteListener<Void>() {
+      @Override
+      public void onComplete(@NonNull Task<Void> task) {
+        if (task.isSuccessful()) {
+          getView().showMessage("Reset password email is sent!");
+          getView().hideProgressDialog();
+        } else {
+          getView().showMessage("Failed to send reset email!");
+          getView().hideProgressDialog();
         }
-      });
-  }
+      }
+    };
 
-  protected void send(String email) {
     getView().showProgressDialog();
     if (!email.equals("")) {
-      mAuth.sendPasswordResetEmail(email)
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-          @Override
-          public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful()) {
-              getView().showMessage("Reset password email is sent!");
-              getView().hideProgressDialog();
-            } else {
-              getView().showMessage("Failed to send reset email!");
-              getView().hideProgressDialog();
-            }
-          }
-        });
+      firebaseManager.sendPasswordResetEmail(email, onCompleteListener);
     } else {
       getView().setErrorOldEmail("Enter email");
       getView().hideProgressDialog();
@@ -107,7 +95,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
             public void onComplete(@NonNull Task<Void> task) {
               if (task.isSuccessful()) {
                 getView().showMessage("Password is updated, sign in with new password!");
-                signOut();
+                firebaseManager.signOut();
                 getView().hideProgressDialog();
               } else {
                 getView().showMessage("Failed to update password!");
@@ -131,7 +119,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
           public void onComplete(@NonNull Task<Void> task) {
             if (task.isSuccessful()) {
               getView().showMessage("Email address is updated. Please sign in with new email id!");
-              signOut();
+              firebaseManager.signOut();
               getView().hideProgressDialog();
             } else {
               getView().showMessage("Failed to update email!");
@@ -153,12 +141,12 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   }
 
   protected void onStart() {
-    mAuth.addAuthStateListener(authListener);
+    //mAuth.addAuthStateListener(authListener);
   }
 
   protected void onStop() {
-    if (authListener != null) {
-      mAuth.removeAuthStateListener(authListener);
-    }
+//    if (authListener != null) {
+//      mAuth.removeAuthStateListener(authListener);
+//    }
   }
 }
