@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity implements MainView {
     "com.pogiba.core.ui.main.MainActivity.EXTRA_TRIGGER_SYNC_FLAG";
 
   @Inject
-  MainPresenter mMainPresenter;
+  MainPresenter presenter;
 
   @Inject
   RibotsAdapter mRibotsAdapter;
@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity implements MainView {
     mRecyclerView.setAdapter(mRibotsAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    mMainPresenter.setFirebaseManager(firebaseManager);
+    presenter.setFirebaseManager(firebaseManager);
 
     if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
       startService(SyncService.getStartIntent(this));
@@ -80,14 +80,14 @@ public class MainActivity extends BaseActivity implements MainView {
   @Override
   public void onStart() {
     super.onStart();
-    mMainPresenter.attachView(this);
-    mMainPresenter.loadRibots();
+    presenter.attachView(this);
+    presenter.loadRibots();
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    mMainPresenter.detachView();
+    presenter.detachView();
   }
 
   @Override

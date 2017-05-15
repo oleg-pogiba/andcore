@@ -3,7 +3,6 @@ package com.pogiba.core.ui.auth.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -14,10 +13,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.pogiba.core.R;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.injection.scope.ConfigPersistent;
 import com.pogiba.core.ui.base.BasePresenter;
@@ -35,7 +30,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
   protected static final int RC_SIGN_IN = 9001;
 
   private Context mContext;
-  private Subscription mSubscription;
+  private Subscription subscription;
   private FirebaseManager firebaseManager;
 
   @Inject
@@ -98,7 +93,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
   @Override
   public void detachView() {
     super.detachView();
-    if (mSubscription != null) mSubscription.unsubscribe();
+    if (subscription != null) subscription.unsubscribe();
 
     if (firebaseManager.getAuthListener() != null) {
       firebaseManager.removeAuthStateListener();

@@ -3,10 +3,7 @@ package com.pogiba.core;
 import android.app.Application;
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
-
 //import io.fabric.sdk.android.Fabric;
-import timber.log.Timber;
 
 import com.pogiba.core.injection.component.ApplicationComponent;
 import com.pogiba.core.injection.component.DaggerApplicationComponent;
@@ -14,7 +11,7 @@ import com.pogiba.core.injection.module.ApplicationModule;
 
 public class CoreApplication extends Application {
 
-  ApplicationComponent mApplicationComponent;
+  ApplicationComponent applicationComponent;
 
   @Override
   public void onCreate() {
@@ -31,16 +28,16 @@ public class CoreApplication extends Application {
   }
 
   public ApplicationComponent getComponent() {
-    if (mApplicationComponent == null) {
-      mApplicationComponent = DaggerApplicationComponent.builder()
+    if (applicationComponent == null) {
+      applicationComponent = DaggerApplicationComponent.builder()
                                 .applicationModule(new ApplicationModule(this))
                                 .build();
     }
-    return mApplicationComponent;
+    return applicationComponent;
   }
 
   // Needed to replace the component with a test specific one
   public void setComponent(ApplicationComponent applicationComponent) {
-    mApplicationComponent = applicationComponent;
+    this.applicationComponent = applicationComponent;
   }
 }

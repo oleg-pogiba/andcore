@@ -21,7 +21,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   GoogleApiClient.OnConnectionFailedListener {
   private static final String TAG = "ProfilePresenter";
   private Context mContext;
-  private Subscription mSubscription;
+  private Subscription subscription;
 
   private FirebaseManager firebaseManager;
 
@@ -47,7 +47,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   @Override
   public void detachView() {
     super.detachView();
-    if (mSubscription != null) mSubscription.unsubscribe();
+    if (subscription != null) subscription.unsubscribe();
 
     if (firebaseManager.getAuthListener() != null) {
       firebaseManager.removeAuthStateListener();

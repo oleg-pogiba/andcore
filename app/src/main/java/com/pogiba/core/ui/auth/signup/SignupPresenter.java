@@ -1,14 +1,8 @@
 package com.pogiba.core.ui.auth.signup;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.ui.auth.FirebaseManager;
 import com.pogiba.core.ui.base.BasePresenter;
 
@@ -16,12 +10,12 @@ import rx.Subscription;
 
 public class SignupPresenter extends BasePresenter<SignupView> {
   public static final String TAG = "SignupPresenter";
-  private Context mContext;
-  private Subscription mSubscription;
+  private Context context;
+  private Subscription subscription;
   private FirebaseManager firebaseManager;
 
   public SignupPresenter(Context context) {
-    this.mContext = context;
+    this.context = context;
   }
 
   @Override
@@ -32,7 +26,7 @@ public class SignupPresenter extends BasePresenter<SignupView> {
   @Override
   public void detachView() {
     super.detachView();
-    if (mSubscription != null) mSubscription.unsubscribe();
+    if (subscription != null) subscription.unsubscribe();
   }
 
   protected void signup(String email, String password) {

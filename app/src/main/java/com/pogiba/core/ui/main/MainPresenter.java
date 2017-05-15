@@ -5,8 +5,6 @@ import android.content.Context;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,14 +21,14 @@ import com.pogiba.core.util.RxUtil;
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainView> {
 
-  private Context mContext;
-  private final DataManager mDataManager;
-  private Subscription mSubscription;
+  private Context context;
+  private final DataManager dataManager;
+  private Subscription subscription;
   private FirebaseManager firebaseManager;
 
   public MainPresenter(Activity view, DataManager dataManager) {
-    mDataManager = dataManager;
-    mContext = view;
+    this.dataManager = dataManager;
+    context = view;
   }
 
   @Override
@@ -42,7 +40,7 @@ public class MainPresenter extends BasePresenter<MainView> {
   @Override
   public void detachView() {
     super.detachView();
-    if (mSubscription != null) mSubscription.unsubscribe();
+    if (subscription != null) subscription.unsubscribe();
 
     if (firebaseManager.getAuthListener() != null) {
       firebaseManager.removeAuthStateListener();
@@ -51,8 +49,8 @@ public class MainPresenter extends BasePresenter<MainView> {
 
   public void loadRibots() {
     checkViewAttached();
-    RxUtil.unsubscribe(mSubscription);
-    mSubscription = mDataManager.getRibots()
+    RxUtil.unsubscribe(subscription);
+    subscription = dataManager.getRibots()
                       .observeOn(AndroidSchedulers.mainThread())
                       .subscribeOn(Schedulers.io())
                       .subscribe(new Subscriber<List<Ribot>>() {

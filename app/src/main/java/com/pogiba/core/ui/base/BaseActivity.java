@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.pogiba.core.CoreApplication;
 import com.pogiba.core.R;
@@ -43,7 +40,7 @@ public class BaseActivity extends AppCompatActivity implements
   private static final Map<Long, ConfigPersistentComponent> sComponentsMap = new HashMap<>();
 
   private ActivityComponent mActivityComponent;
-  private long mActivityId;
+  private long activityId;
   private ProgressDialog progressDialog;
 
   @Inject
@@ -57,18 +54,18 @@ public class BaseActivity extends AppCompatActivity implements
 
     // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
     // being called after a configuration change.
-    mActivityId = savedInstanceState != null ?
+    activityId = savedInstanceState != null ?
         savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();
 
-    if (!sComponentsMap.containsKey(mActivityId)) {
-      Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId);
+    if (!sComponentsMap.containsKey(activityId)) {
+      Timber.i("Creating new ConfigPersistentComponent id=%d", activityId);
       configPersistentComponent = DaggerConfigPersistentComponent.builder()
           .applicationComponent(CoreApplication.get(this).getComponent())
           .build();
-      sComponentsMap.put(mActivityId, configPersistentComponent);
+      sComponentsMap.put(activityId, configPersistentComponent);
     } else {
-      Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
-      configPersistentComponent = sComponentsMap.get(mActivityId);
+      Timber.i("Reusing ConfigPersistentComponent id=%d", activityId);
+      configPersistentComponent = sComponentsMap.get(activityId);
     }
 
     mActivityComponent = configPersistentComponent.activityComponent(new ActivityModule(this), new FirebaseModule(this));
@@ -83,14 +80,14 @@ public class BaseActivity extends AppCompatActivity implements
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putLong(KEY_ACTIVITY_ID, mActivityId);
+    outState.putLong(KEY_ACTIVITY_ID, activityId);
   }
 
   @Override
   protected void onDestroy() {
     if (!isChangingConfigurations()) {
-      Timber.i("Clearing ConfigPersistentComponent id=%d", mActivityId);
-      sComponentsMap.remove(mActivityId);
+      Timber.i("Clearing ConfigPersistentComponent id=%d", activityId);
+      sComponentsMap.remove(activityId);
     }
     super.onDestroy();
   }
