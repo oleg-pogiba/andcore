@@ -16,7 +16,7 @@ import rx.Observable;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.data.model.Ribot;
 import com.pogiba.core.test.common.TestDataFactory;
-import com.pogiba.core.ui.main.MainMvpView;
+import com.pogiba.core.ui.main.MainView;
 import com.pogiba.core.ui.main.MainPresenter;
 import com.pogiba.core.util.RxSchedulersOverrideRule;
 
@@ -27,7 +27,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class MainPresenterTest {
 
-    @Mock MainMvpView mMockMainMvpView;
+    @Mock
+    MainView mMockMainMvpView;
     @Mock DataManager mMockDataManager;
     private MainPresenter mMainPresenter;
 

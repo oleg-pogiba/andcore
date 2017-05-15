@@ -1,6 +1,7 @@
 package com.pogiba.core.ui.main;
 
-import android.util.Log;
+import android.app.Activity;
+import android.content.Context;
 
 import java.util.List;
 
@@ -12,10 +13,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.data.model.Ribot;
 import com.pogiba.core.injection.scope.ConfigPersistent;
@@ -24,19 +21,20 @@ import com.pogiba.core.ui.base.BasePresenter;
 import com.pogiba.core.util.RxUtil;
 
 @ConfigPersistent
-public class MainPresenter extends BasePresenter<MainMvpView> {
+public class MainPresenter extends BasePresenter<MainView> {
 
+  private Context mContext;
   private final DataManager mDataManager;
   private Subscription mSubscription;
   private FirebaseManager firebaseManager;
 
-  @Inject
-  public MainPresenter(DataManager dataManager) {
+  public MainPresenter(Activity view, DataManager dataManager) {
     mDataManager = dataManager;
+    mContext = view;
   }
 
   @Override
-  public void attachView(MainMvpView view) {
+  public void attachView(MainView view) {
     super.attachView(view);
     firebaseManager.addAuthStateListener();
   }

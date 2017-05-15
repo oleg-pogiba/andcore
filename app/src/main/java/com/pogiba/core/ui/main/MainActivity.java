@@ -26,7 +26,7 @@ import com.pogiba.core.ui.base.BaseActivity;
 import com.pogiba.core.ui.auth.FirebaseManager;
 import com.pogiba.core.util.DialogFactory;
 
-public class MainActivity extends BaseActivity implements MainMvpView {
+public class MainActivity extends BaseActivity implements MainView {
 
   private static final String EXTRA_TRIGGER_SYNC_FLAG =
     "com.pogiba.core.ui.main.MainActivity.EXTRA_TRIGGER_SYNC_FLAG";
@@ -71,31 +71,22 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     mMainPresenter.setFirebaseManager(firebaseManager);
-    mMainPresenter.attachView(this);
-
-
-    mMainPresenter.loadRibots();
 
     if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
       startService(SyncService.getStartIntent(this));
     }
   }
 
-//  @Override
-//  public void onStart() {
-//    super.onStart();
-//    presenter.onStart();
-//  }
-//
-//  @Override
-//  public void onStop() {
-//    super.onStop();
-//    presenter.onStop();
-//  }
+  @Override
+  public void onStart() {
+    super.onStart();
+    mMainPresenter.attachView(this);
+    mMainPresenter.loadRibots();
+  }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  public void onStop() {
+    super.onStop();
     mMainPresenter.detachView();
   }
 
