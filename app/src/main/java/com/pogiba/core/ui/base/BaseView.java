@@ -6,10 +6,11 @@ package com.pogiba.core.ui.base;
  * pattern must implement. Generally this interface will be extended by a more specific interface
  * that then usually will be implemented by an Activity or Fragment.
  */
-public interface MvpView {
-  public void showProgressDialog();
+public interface BaseView {
 
-  public void hideProgressDialog();
+  void showProgressDialog();
 
-  public void showMessage(String message);
+  void hideProgressDialog();
+
+  void showMessage(String message);
 }

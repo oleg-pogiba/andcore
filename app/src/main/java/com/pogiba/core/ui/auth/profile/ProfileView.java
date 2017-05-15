@@ -1,9 +1,8 @@
 package com.pogiba.core.ui.auth.profile;
 
-import com.bumptech.glide.load.model.StringLoader;
-import com.pogiba.core.ui.base.MvpView;
+import com.pogiba.core.ui.base.BaseView;
 
-public interface ProfileView extends MvpView {
+public interface ProfileView extends BaseView {
   public void setErrorOldEmail(String str);
 
   public void setErrorNewPassword(String str);

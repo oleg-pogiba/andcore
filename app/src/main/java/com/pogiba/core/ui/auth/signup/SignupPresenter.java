@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.pogiba.core.ui.auth.FirebaseManager;
 import com.pogiba.core.ui.base.BasePresenter;
 
 import rx.Subscription;
@@ -17,6 +18,7 @@ public class SignupPresenter extends BasePresenter<SignupView> {
   public static final String TAG = "SignupPresenter";
   private Context mContext;
   private Subscription mSubscription;
+  private FirebaseManager firebaseManager;
 
   public SignupPresenter(Context context) {
     this.mContext = context;
@@ -52,22 +54,10 @@ public class SignupPresenter extends BasePresenter<SignupView> {
 
     getView().showProgressDialog();
     //create user
-    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-      .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-          getView().hideProgressDialog();
-          getView().showMessage("createUserWithEmail:onComplete:" + task.isSuccessful());
-          // If sign in fails, display a message to the user. If sign in succeeds
-          // the auth state listener will be notified and logic to handle the
-          // signed in user can be handled in the listener.
-          if (!task.isSuccessful()) {
-            getView().showMessage("Authentication failed." + task.getException());
-            Log.e(TAG, "Authentication failed." + task.getException());
-          } else {
-            getView().goToProfileAndFinishActivity();
-          }
-        }
-      });
+    firebaseManager.createUserWithEmailAndPassword(email, password);
+  }
+
+  public void setFirebaseManager(FirebaseManager firebaseManager) {
+    this.firebaseManager = firebaseManager;
   }
 }

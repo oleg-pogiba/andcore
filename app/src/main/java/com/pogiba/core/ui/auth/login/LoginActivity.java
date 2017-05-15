@@ -56,8 +56,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     inject();
     presenter.setFirebaseManager(firebaseManager);
-    presenter.attachView(this);
-
 
     // set the view now
     setContentView(R.layout.activity_login);
@@ -67,22 +65,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
     setSupportActionBar(toolbar);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    presenter.detachView();
-  }
 
   @Override
   public void onStart() {
     super.onStart();
-    presenter.onStart();
+    presenter.attachView(this);
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    presenter.onStop();
+    presenter.detachView();
   }
 
   @Override

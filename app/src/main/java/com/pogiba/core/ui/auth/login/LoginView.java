@@ -1,7 +1,7 @@
 package com.pogiba.core.ui.auth.login;
 
-import com.pogiba.core.ui.base.MvpView;
+import com.pogiba.core.ui.base.BaseView;
 
-public interface LoginView extends MvpView {
-  public void setErrorForInputPassword();
+public interface LoginView extends BaseView {
+  void setErrorForInputPassword();
 }

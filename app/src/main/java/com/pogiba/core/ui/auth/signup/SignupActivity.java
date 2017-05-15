@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.pogiba.core.R;
+import com.pogiba.core.ui.auth.FirebaseManager;
 import com.pogiba.core.ui.base.BaseActivity;
 
 import javax.inject.Inject;
@@ -18,6 +19,9 @@ public class SignupActivity extends BaseActivity implements SignupView {
   private final String TAG = "SignupActivity";
   @Inject
   SignupPresenter presenter;
+
+  @Inject
+  FirebaseManager firebaseManager;
 
   @BindView(R.id.email)
   EditText inputEmail;
@@ -46,9 +50,21 @@ public class SignupActivity extends BaseActivity implements SignupView {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     inject();
-    presenter.attachView(this);
+    presenter.setFirebaseManager(firebaseManager);
     setContentView(R.layout.activity_signup);
     ButterKnife.bind(this);
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    presenter.attachView(this);
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    presenter.detachView();
   }
 
   private void inject() {

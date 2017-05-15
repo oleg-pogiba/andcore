@@ -3,6 +3,7 @@ package com.pogiba.core.ui.auth;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -36,17 +37,22 @@ public class FirebaseManager {
     this.onCompleteListenerAuthResult = onCompleteListenerAuthResult;
   }
 
+  public void createUserWithEmailAndPassword(String email, String password) {
+    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+      .addOnCompleteListener(onCompleteListenerAuthResult);
+  }
+
   public void signOut() {
     //Firebase signOut
     firebaseAuth.signOut();
     //Google signOut
     Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-        new ResultCallback<Status>() {
-          @Override
-          public void onResult(Status status) {
-            //...
-          }
-        });
+      new ResultCallback<Status>() {
+        @Override
+        public void onResult(Status status) {
+          //...
+        }
+      });
     Toast.makeText(activity, "Sign Out...", Toast.LENGTH_SHORT).show();
   }
 
@@ -60,7 +66,7 @@ public class FirebaseManager {
 
   public void sendPasswordResetEmail(String email, OnCompleteListener<Void> onCompleteListener) {
     firebaseAuth.sendPasswordResetEmail(email)
-        .addOnCompleteListener(onCompleteListener);
+      .addOnCompleteListener(onCompleteListener);
   }
 
   public FirebaseAuth getFirebaseAuth() {
@@ -82,12 +88,12 @@ public class FirebaseManager {
   public void authWithGoogle(GoogleSignInAccount account) {
     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
     getFirebaseAuth().signInWithCredential(credential)
-        .addOnCompleteListener(onCompleteListenerAuthResult);
+      .addOnCompleteListener(onCompleteListenerAuthResult);
   }
 
-  public void signInWithEmailAndPassword(String email, String password){
+  public void signInWithEmailAndPassword(String email, String password) {
     getFirebaseAuth().signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener(onCompleteListenerAuthResult);
+      .addOnCompleteListener(onCompleteListenerAuthResult);
   }
 
   public Intent getGoogleSignInIntent() {

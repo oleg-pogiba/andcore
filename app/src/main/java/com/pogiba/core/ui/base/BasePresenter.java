@@ -5,7 +5,7 @@ package com.pogiba.core.ui.base;
  * attachView() and detachView(). It also handles keeping a reference to the mvpView that
  * can be accessed from the children classes by calling getView().
  */
-public class BasePresenter<T extends MvpView> implements Presenter<T> {
+public class BasePresenter<T extends BaseView> implements Presenter<T> {
 
   private T view;
 
@@ -33,7 +33,7 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
 
   public static class MvpViewNotAttachedException extends RuntimeException {
     public MvpViewNotAttachedException() {
-      super("Please call Presenter.attachView(MvpView) before" +
+      super("Please call Presenter.attachView(BaseView) before" +
               " requesting data to the Presenter");
     }
   }

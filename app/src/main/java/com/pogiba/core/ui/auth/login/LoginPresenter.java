@@ -72,19 +72,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
   public void attachView(LoginView view) {
     super.attachView(view);
     firebaseManager.addAuthStateListener();
-  }
 
-  @Override
-  public void detachView() {
-    super.detachView();
-    if (mSubscription != null) mSubscription.unsubscribe();
-
-    if (firebaseManager.getAuthListener() != null) {
-      firebaseManager.removeAuthStateListener();
-    }
-  }
-
-  protected void onStart() {
     OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(firebaseManager.getGoogleApiClient());
     if (opr.isDone()) {
       // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
@@ -107,8 +95,14 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
     }
   }
 
-  protected void onStop() {
+  @Override
+  public void detachView() {
+    super.detachView();
+    if (mSubscription != null) mSubscription.unsubscribe();
 
+    if (firebaseManager.getAuthListener() != null) {
+      firebaseManager.removeAuthStateListener();
+    }
   }
 
   public void handleSignInResult(GoogleSignInResult googleSignInResult){

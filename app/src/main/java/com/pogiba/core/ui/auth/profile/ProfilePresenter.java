@@ -23,20 +23,11 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   private Context mContext;
   private Subscription mSubscription;
 
-//  @Inject
-//  FirebaseAuth mAuth;
-//
-//  @Inject
-//  FirebaseAuth.AuthStateListener authListener;
-//
-//  @Inject
-//  GoogleApiClient mGoogleApiClient;
-
   private FirebaseManager firebaseManager;
 
   public ProfilePresenter(Activity view) {
     mContext = view;
-    super.attachView((ProfileView) view);
+    //super.attachView((ProfileView) view);
   }
 
   //get current user
@@ -49,12 +40,18 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
   @Override
   public void attachView(ProfileView view) {
     super.attachView(view);
+
+    firebaseManager.addAuthStateListener();
   }
 
   @Override
   public void detachView() {
     super.detachView();
     if (mSubscription != null) mSubscription.unsubscribe();
+
+    if (firebaseManager.getAuthListener() != null) {
+      firebaseManager.removeAuthStateListener();
+    }
   }
 
   protected void sendPasswordResetEmail(String email) {
@@ -140,13 +137,4 @@ public class ProfilePresenter extends BasePresenter<ProfileView> implements
     Log.d(TAG, "onConnectionFailed:" + connectionResult);
   }
 
-  protected void onStart() {
-    //mAuth.addAuthStateListener(authListener);
-  }
-
-  protected void onStop() {
-//    if (authListener != null) {
-//      mAuth.removeAuthStateListener(authListener);
-//    }
-  }
 }

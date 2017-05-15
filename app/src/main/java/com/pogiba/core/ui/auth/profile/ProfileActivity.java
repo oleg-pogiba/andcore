@@ -108,7 +108,6 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
     setSupportActionBar(toolbar);
 
     inject();
-    presenter.attachView(this);
     presenter.setFirebaseManager(firebaseManager);
     ButterKnife.bind(this);
 
@@ -160,13 +159,13 @@ public class ProfileActivity extends BaseActivity implements ProfileView {
   @Override
   public void onStart() {
     super.onStart();
-    presenter.onStart();
+    presenter.attachView(this);
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    presenter.onStop();
+    presenter.detachView();
   }
 
 }
