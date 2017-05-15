@@ -6,11 +6,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.pogiba.core.R;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 
 import javax.inject.Inject;
 
@@ -57,14 +55,22 @@ public class LoginActivity extends BaseActivity implements LoginView {
     super.onCreate(savedInstanceState);
 
     inject();
-    presenter.attachView(this);
     presenter.setFirebaseManager(firebaseManager);
+    presenter.attachView(this);
+
+
     // set the view now
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    presenter.detachView();
   }
 
   @Override
@@ -82,12 +88,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-
-    // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    if (requestCode == LoginPresenter.RC_SIGN_IN) {
-      GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-      presenter.handleSignInResult(result);
-    }
+    presenter.checkGoogleSignInApiResult(requestCode, data);
   }
 
   public void setErrorForInputPassword() {
@@ -103,6 +104,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     showProgressDialog();
     Intent signInIntent = firebaseManager.getGoogleSignInIntent();
     startActivityForResult(signInIntent, presenter.RC_SIGN_IN);
+    hideProgressDialog();
   }
 }
 

@@ -23,7 +23,7 @@ import com.pogiba.core.R;
 import com.pogiba.core.data.SyncService;
 import com.pogiba.core.data.model.Ribot;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 import com.pogiba.core.util.DialogFactory;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
@@ -69,8 +69,11 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     mRecyclerView.setAdapter(mRibotsAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    mMainPresenter.setFirebaseManager(firebaseManager);
     mMainPresenter.attachView(this);
-    //firebaseManager.addAuthStateListener();
+
+
     mMainPresenter.loadRibots();
 
     if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
@@ -78,12 +81,21 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     }
   }
 
+//  @Override
+//  public void onStart() {
+//    super.onStart();
+//    presenter.onStart();
+//  }
+//
+//  @Override
+//  public void onStop() {
+//    super.onStop();
+//    presenter.onStop();
+//  }
+
   @Override
   protected void onDestroy() {
     super.onDestroy();
-
-    //firebaseManager.removeAuthStateListener();
-
     mMainPresenter.detachView();
   }
 

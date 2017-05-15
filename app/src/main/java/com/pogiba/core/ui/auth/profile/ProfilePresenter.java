@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.ui.base.BasePresenter;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 
 import rx.Subscription;
 

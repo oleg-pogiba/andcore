@@ -1,4 +1,4 @@
-package com.pogiba.core.ui.base;
+package com.pogiba.core.ui.auth;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,21 +15,25 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.pogiba.core.ui.base.BaseActivity;
+
+import javax.inject.Inject;
 
 public class FirebaseManager {
   public static final String TAG = "FirebaseManager";
 
   private FirebaseAuth firebaseAuth;
-  private FirebaseAuth.AuthStateListener authListener;
   private GoogleApiClient googleApiClient;
   private BaseActivity activity;
+  private FirebaseAuth.AuthStateListener authStateListener;
+  private OnCompleteListener<AuthResult> onCompleteListenerAuthResult;
 
-  public FirebaseManager(BaseActivity activity, FirebaseAuth auth, FirebaseAuth.AuthStateListener authListener, GoogleApiClient googleApiClient) {
+  public FirebaseManager(BaseActivity activity, FirebaseAuth auth, GoogleApiClient googleApiClient, FirebaseAuth.AuthStateListener authStateListener, OnCompleteListener<AuthResult> onCompleteListenerAuthResult) {
     this.firebaseAuth = auth;
-    this.authListener = authListener;
     this.googleApiClient = googleApiClient;
     this.activity = activity;
-    firebaseAuth.addAuthStateListener(authListener);
+    this.authStateListener = authStateListener;
+    this.onCompleteListenerAuthResult = onCompleteListenerAuthResult;
   }
 
   public void signOut() {
@@ -47,11 +51,11 @@ public class FirebaseManager {
   }
 
   public void addAuthStateListener() {
-    firebaseAuth.addAuthStateListener(authListener);
+    firebaseAuth.addAuthStateListener(authStateListener);
   }
 
   public void removeAuthStateListener() {
-    firebaseAuth.removeAuthStateListener(authListener);
+    firebaseAuth.removeAuthStateListener(authStateListener);
   }
 
   public void sendPasswordResetEmail(String email, OnCompleteListener<Void> onCompleteListener) {
@@ -64,7 +68,7 @@ public class FirebaseManager {
   }
 
   public FirebaseAuth.AuthStateListener getAuthListener() {
-    return authListener;
+    return authStateListener;
   }
 
   public GoogleApiClient getGoogleApiClient() {
@@ -75,15 +79,15 @@ public class FirebaseManager {
     return activity;
   }
 
-  public void authWithGoogle(GoogleSignInAccount account, OnCompleteListener<AuthResult> onCompleteListener) {
+  public void authWithGoogle(GoogleSignInAccount account) {
     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
     getFirebaseAuth().signInWithCredential(credential)
-        .addOnCompleteListener(onCompleteListener);
+        .addOnCompleteListener(onCompleteListenerAuthResult);
   }
 
-  public void signInWithEmailAndPassword(String email, String password, OnCompleteListener<AuthResult> onCompleteListener){
+  public void signInWithEmailAndPassword(String email, String password){
     getFirebaseAuth().signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener(onCompleteListener);
+        .addOnCompleteListener(onCompleteListenerAuthResult);
   }
 
   public Intent getGoogleSignInIntent() {

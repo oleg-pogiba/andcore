@@ -2,6 +2,7 @@ package com.pogiba.core.ui.auth.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +21,7 @@ import com.pogiba.core.R;
 import com.pogiba.core.data.DataManager;
 import com.pogiba.core.injection.scope.ConfigPersistent;
 import com.pogiba.core.ui.base.BasePresenter;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 
 import javax.inject.Inject;
 
@@ -64,32 +65,23 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
 
     getView().showProgressDialog();
     //authenticate user
-    OnCompleteListener<AuthResult> onCompleteListener = new OnCompleteListener<AuthResult>() {
-      @Override
-      public void onComplete(@NonNull Task<AuthResult> task) {
-        // If sign in fails, display a message to the user. If sign in succeeds
-        // the firebaseAuth state listener will be notified and logic to handle the
-        // signed in user can be handled in the listener.
-        getView().hideProgressDialog();
-        if (!task.isSuccessful()) {
-          // there was an error
-          getView().showMessage(mContext.getString(R.string.auth_failed));
-        }
-      }
-    };
-
-    firebaseManager.signInWithEmailAndPassword(email, password, onCompleteListener);
+    firebaseManager.signInWithEmailAndPassword(email, password);
   }
 
   @Override
   public void attachView(LoginView view) {
     super.attachView(view);
+    firebaseManager.addAuthStateListener();
   }
 
   @Override
   public void detachView() {
     super.detachView();
     if (mSubscription != null) mSubscription.unsubscribe();
+
+    if (firebaseManager.getAuthListener() != null) {
+      firebaseManager.removeAuthStateListener();
+    }
   }
 
   protected void onStart() {
@@ -113,58 +105,41 @@ public class LoginPresenter extends BasePresenter<LoginView> implements
         }
       });
     }
-
-    firebaseManager.addAuthStateListener();
   }
 
   protected void onStop() {
-    if (firebaseManager.getAuthListener() != null) {
-      firebaseManager.removeAuthStateListener();
-    }
+
   }
 
-  protected void handleSignInResult(GoogleSignInResult result) {
-    Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-    if (result.isSuccess()) {
+  public void handleSignInResult(GoogleSignInResult googleSignInResult){
+    Log.d(TAG, "handleSignInResult:" + googleSignInResult.isSuccess());
+    if (googleSignInResult.isSuccess()) {
       // Signed in successfully, show authenticated UI.
-      GoogleSignInAccount account = result.getSignInAccount();
+      GoogleSignInAccount account = googleSignInResult.getSignInAccount();
       firebaseAuthWithGoogle(account);
     } else {
       // Signed out, show unauthenticated UI.
     }
-    getView().hideProgressDialog();
   }
 
-  private void handleFirebaseAuthWithGoogleResult(Task<AuthResult> task) {
-    Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
-    // If sign in fails, display a message to the user. If sign in succeeds
-    // the mAuth state listener will be notified and logic to handle the
-    // signed in user can be handled in the listener.
-    if (!task.isSuccessful()) {
-      Log.w(TAG, "signInWithCredential", task.getException());
-      getView().showMessage("Authentication failed.");
-    } else {
-      //...
+  public void checkGoogleSignInApiResult(int requestCode, Intent data) {
+    // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+    if (requestCode == LoginPresenter.RC_SIGN_IN) {
+      GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+      handleSignInResult(result);
     }
   }
+
 
   private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
     Log.d(TAG, "firebaseAuthWithGoogle Id:" + account.getId());
     Log.d(TAG, "firebaseAuthWithGoogle IdToken:" + account.getIdToken());
-    OnCompleteListener<AuthResult> onCompleteListener = new OnCompleteListener<AuthResult>() {
-      @Override
-      public void onComplete(@NonNull Task<AuthResult> task) {
-        handleFirebaseAuthWithGoogleResult(task);
-      }
-    };
-    firebaseManager.authWithGoogle(account, onCompleteListener);
+    firebaseManager.authWithGoogle(account);
   }
 
   @Override
   public void onConnectionFailed(ConnectionResult connectionResult) {
-    // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-    // be available.
+    // An unresolvable error has occurred and Google APIs (including Sign-In) will not be available.
     Log.d(TAG, "onConnectionFailed:" + connectionResult);
   }
 

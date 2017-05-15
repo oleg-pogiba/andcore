@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.pogiba.core.R;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 
 import javax.inject.Inject;
 

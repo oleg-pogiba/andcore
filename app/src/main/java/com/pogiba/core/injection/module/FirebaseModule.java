@@ -1,24 +1,28 @@
 package com.pogiba.core.injection.module;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pogiba.core.R;
 import com.pogiba.core.ui.Navigator;
 import com.pogiba.core.ui.base.BaseActivity;
-import com.pogiba.core.ui.base.FirebaseManager;
+import com.pogiba.core.ui.auth.FirebaseManager;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class FirebaseModule {
+
+  private static final String TAG = "FirebaseModule";
 
   private BaseActivity activity;
 
@@ -67,7 +71,8 @@ public class FirebaseModule {
           if (user != null) {
             // User is signed in
             Log.d("FirebaseAuthStateLstnr", "onAuthStateChanged:signed_in:" + user.getUid());
-            //navigator.navigateToDefaultAndFinishCurrent(activity);
+            //...
+            //...navigator.navigateToDefaultAndFinishCurrent(activity);
           } else {
             // User is signed out
             Log.d("FirebaseAuthStateLstnr", "onAuthStateChanged:signed_out");
@@ -78,8 +83,28 @@ public class FirebaseModule {
   }
 
   @Provides
-  FirebaseManager provideFirebaseManager(BaseActivity activity, FirebaseAuth auth, FirebaseAuth.AuthStateListener authListener, GoogleApiClient googleApiClient){
-    return new FirebaseManager(activity, auth, authListener, googleApiClient);
+  FirebaseManager provideFirebaseManager(BaseActivity activity, FirebaseAuth auth, GoogleApiClient googleApiClient, FirebaseAuth.AuthStateListener authStateListener, OnCompleteListener<AuthResult> onCompleteListenerAuthResult){
+    return new FirebaseManager(activity, auth, googleApiClient, authStateListener, onCompleteListenerAuthResult);
+  }
+
+  @Provides
+  OnCompleteListener<AuthResult> provideOnCompleteListenerAuthResult(final Navigator navigator){
+    return new OnCompleteListener<AuthResult>() {
+      @Override
+      public void onComplete(@NonNull Task<AuthResult> task) {
+        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+        activity.hideProgressDialog();
+        // If sign in fails, display a message to the user. If sign in succeeds
+        // the mAuth state listener will be notified and logic to handle the
+        // signed in user can be handled in the listener.
+        if (!task.isSuccessful()) {
+          Log.w(TAG, "signInWithCredential", task.getException());
+          activity.showMessage("Authentication failed.");
+        } else {
+          navigator.navigateToDefaultAndFinishCurrent(activity);
+        }
+      }
+    };
   }
 
 }
